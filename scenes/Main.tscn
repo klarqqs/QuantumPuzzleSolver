@@ -1,0 +1,113 @@
+[gd_scene load_steps=4 format=3 uid="uid://quantum_main"]
+
+; ============================================================
+; main.tscn — QuantumPuzzle Solver Root Scene
+; ============================================================
+; Scene tree:
+;   Node2D (main)
+;   ├── ColorRect (background — deep space black)
+;   ├── GroverEngine (Node, script: GroverEngine.gd)
+;   ├── PuzzleManager (Node, script: PuzzleManager.gd)
+;   └── CanvasLayer (UIManager, script: UIManager.gd)
+;       ├── VBoxContainer
+;       │   ├── Label (HUD/LevelLabel)
+;       │   ├── HBoxContainer
+;       │   │   ├── Label (HUD/ScoreLabel)
+;       │   │   └── Label (HUD/ComboLabel)
+;       ├── GridContainer (QubitGrid — 4x4 or dynamic)
+;       ├── Label (PhaseBanner)
+;       ├── Label (HintLabel)
+;       └── HBoxContainer (Controls)
+;           ├── Button (OracleButton)
+;           ├── Button (HintButton)
+;           └── Button (RestartButton)
+; ============================================================
+; To build in Godot:
+;   1. Create Node2D root, rename to "Main"
+;   2. Add ColorRect child, set full rect, color: #05050F
+;   3. Add Node child "GroverEngine", attach scripts/GroverEngine.gd
+;   4. Add Node child "PuzzleManager", attach scripts/PuzzleManager.gd
+;      Set child path $GroverEngine in inspector
+;   5. Add CanvasLayer "UIManager", attach scripts/UIManager.gd
+;   6. Add children per tree above, link @onready paths
+;   7. Style: dark background, neon blue/green palette
+; ============================================================
+
+[node name="Main" type="Node2D"]
+
+[node name="Background" type="ColorRect" parent="."]
+anchors_preset = 15
+color = Color(0.02, 0.02, 0.06, 1)
+
+[node name="GroverEngine" type="Node" parent="."]
+script = ExtResource("res://scripts/GroverEngine.gd")
+
+[node name="PuzzleManager" type="Node" parent="."]
+script = ExtResource("res://scripts/PuzzleManager.gd")
+
+[node name="UIManager" type="CanvasLayer" parent="."]
+script = ExtResource("res://scripts/UIManager.gd")
+
+[node name="PhaseBanner" type="Label" parent="UIManager"]
+anchors_preset = 5
+offset_top = 20.0
+text = "🌊 Quantum Superposition Active"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 20
+
+[node name="HUD" type="HBoxContainer" parent="UIManager"]
+anchors_preset = 1
+offset_top = 60.0
+offset_right = 500.0
+
+[node name="LevelLabel" type="Label" parent="UIManager/HUD"]
+text = "Level 1 — 2 Qubits"
+theme_override_font_sizes/font_size = 14
+
+[node name="ScoreLabel" type="Label" parent="UIManager/HUD"]
+text = "Score: 0"
+theme_override_font_sizes/font_size = 14
+
+[node name="ComboLabel" type="Label" parent="UIManager/HUD"]
+text = ""
+theme_override_font_sizes/font_size = 14
+
+[node name="GridContainer" type="GridContainer" parent="UIManager"]
+anchors_preset = 8
+offset_left = -160.0
+offset_top = -160.0
+offset_right = 160.0
+offset_bottom = 160.0
+columns = 2
+theme_override_constants/h_separation = 8
+theme_override_constants/v_separation = 8
+
+[node name="HintLabel" type="Label" parent="UIManager"]
+anchors_preset = 2
+offset_bottom = -80.0
+text = "Find 1 item in 4. Classic Grover!"
+horizontal_alignment = 1
+theme_override_font_sizes/font_size = 13
+modulate = Color(0.7, 0.8, 1.0, 1)
+
+[node name="Controls" type="HBoxContainer" parent="UIManager"]
+anchors_preset = 2
+offset_top = -50.0
+offset_left = -200.0
+offset_right = 200.0
+
+[node name="OracleButton" type="Button" parent="UIManager/Controls"]
+text = "⚛ Run Oracle"
+theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(140, 40)
+
+[node name="HintButton" type="Button" parent="UIManager/Controls"]
+text = "💡 Hint (−50pts)"
+theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(140, 40)
+disabled = true
+
+[node name="RestartButton" type="Button" parent="UIManager/Controls"]
+text = "↺ Restart"
+theme_override_font_sizes/font_size = 14
+custom_minimum_size = Vector2(100, 40)
